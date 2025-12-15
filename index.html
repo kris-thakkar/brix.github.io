@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BRIX — Investor Pitch</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg: #0b0f13;
+      --panel: #111823;
+      --muted: #99a5ba;
+      --text: #f4f7fb;
+      --accent: #f4a261;
+      --accent-2: #2dd4bf;
+      --accent-3: #f6d58a;
+      --border: #1c2433;
+      --card: linear-gradient(140deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Space Grotesk', 'Inter', system-ui, -apple-system, sans-serif;
+      background: radial-gradient(circle at 20% 20%, rgba(45,212,191,0.09), transparent 32%),
+                  radial-gradient(circle at 78% 8%, rgba(244,162,97,0.1), transparent 30%),
+                  radial-gradient(circle at 50% 90%, rgba(246,213,138,0.09), transparent 35%),
+                  var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      scroll-behavior: smooth;
+    }
+    a { color: inherit; text-decoration: none; }
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(14px);
+      background: rgba(11, 15, 19, 0.9);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      gap: 12px;
+    }
+    .brand {
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 18px;
+    }
+    .brand span {
+      padding: 6px 10px;
+      border-radius: 10px;
+      background: rgba(244, 162, 97, 0.18);
+      color: var(--accent);
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .nav a {
+      padding: 8px 10px;
+      color: var(--muted);
+      font-weight: 500;
+      font-size: 14px;
+    }
+    .nav a:hover, .nav a.active { color: var(--text); }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 12px 24px rgba(0,0,0,0.15); }
+    .btn-primary {
+      background: linear-gradient(120deg, #f6d58a, #f4a261);
+      color: #0f1116;
+      border: none;
+    }
+    .btn-ghost { background: rgba(255,255,255,0.04); }
+    main { max-width: 1200px; margin: 0 auto; padding: 24px 20px 80px; }
+    section { margin: 80px 0; }
+    h1, h2, h3, h4 { margin: 0 0 16px; line-height: 1.2; }
+    h1 { font-size: clamp(32px, 5vw, 52px); }
+    h2 { font-size: clamp(24px, 4vw, 34px); }
+    h3 { font-size: 20px; }
+    p { margin: 0 0 14px; color: var(--muted); }
+    .muted { color: var(--muted); }
+    .hero {
+      background: radial-gradient(circle at 40% 40%, rgba(45,212,191,0.08), transparent 35%),
+                  linear-gradient(160deg, rgba(255,255,255,0.05), rgba(255,255,255,0));
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 70% 20%, rgba(244,162,97,0.15), transparent 40%);
+      pointer-events: none;
+    }
+    .hero-content { position: relative; z-index: 1; }
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 14px;
+      margin: 26px 0 6px;
+    }
+    .kpi-card {
+      padding: 16px;
+      border-radius: 14px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .kpi-card small { color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; }
+    .kpi-value { font-size: 20px; font-weight: 700; color: var(--accent); }
+    .layout-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+      margin-top: 14px;
+    }
+    .card {
+      padding: 18px;
+      border-radius: 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      position: relative;
+    }
+    .card h3 { margin-bottom: 10px; }
+    ul { margin: 0; padding-left: 16px; color: var(--muted); }
+    li { margin-bottom: 8px; }
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+    }
+    table { width: 100%; border-collapse: collapse; min-width: 520px; }
+    th, td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 14px;
+    }
+    th { color: var(--text); font-weight: 600; background: rgba(255,255,255,0.02); }
+    tr:last-child td { border-bottom: none; }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 10px;
+      font-size: 12px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+    .tag.accent { color: #0b0f1f; background: var(--accent); border-color: transparent; }
+    .chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 8px 0 0;
+    }
+    details {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.02);
+    }
+    details summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--text);
+      list-style: none;
+    }
+    details summary::-webkit-details-marker { display: none; }
+    details[open] { background: rgba(255,255,255,0.04); }
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 18px;
+    }
+    .financial-highlights {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin: 16px 0 24px;
+    }
+    .chart-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 16px;
+      margin: 12px 0 18px;
+    }
+    .chart-card {
+      padding: 16px;
+      border-radius: 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+    }
+    .scenario-toggle {
+      display: inline-flex;
+      gap: 8px;
+      padding: 6px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+    }
+    .scenario-btn {
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .scenario-btn.active {
+      background: var(--accent);
+      color: #0f1116;
+    }
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .pill {
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .risk-list li { margin-bottom: 10px; }
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .timeline .card strong { display: block; margin-bottom: 6px; color: var(--accent); }
+    .contact {
+      padding: 18px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(245,196,81,0.12), rgba(29,209,161,0.08));
+      border: 1px solid var(--border);
+    }
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px;
+    }
+    .faq-grid details { height: 100%; }
+    footer { text-align: center; color: var(--muted); margin-top: 40px; font-size: 13px; }
+    .bar {
+      position: relative;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      overflow: hidden;
+    }
+    .bar span {
+      position: absolute;
+      inset: 0;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent-2), var(--accent));
+    }
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 8px 0 12px;
+    }
+    .badge {
+      padding: 6px 10px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+    .before-after {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .before-after .card h3 { display: flex; align-items: center; gap: 10px; }
+    .circle-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #0f1116;
+      background: linear-gradient(140deg, #f4a261, #f6d58a);
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .mini-chart {
+      position: relative;
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+    }
+    .mini-chart .bar { margin-top: 10px; }
+    .grid-visual {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .grid-visual .card { background: linear-gradient(160deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)); }
+    @media (max-width: 640px) {
+      .nav-inner { flex-direction: column; align-items: flex-start; }
+      .hero { padding: 28px; }
+      section { margin: 64px 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="nav-inner">
+      <div class="brand">BRIX <span>Pitch</span></div>
+      <div class="nav-links">
+        <a href="#problem">Problem</a>
+        <a href="#market">Market</a>
+        <a href="#solution">Solution</a>
+        <a href="#execution">Execution</a>
+        <a href="#financials">Financials</a>
+        <a href="#risks">Risks</a>
+        <a href="#exit">Exit</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="nav-links">
+        <a class="btn btn-primary" href="#financials">View Financials</a>
+      </div>
+    </div>
+  </header>
+  <main>
+    <section id="hero" class="hero">
+      <div class="hero-content">
+        <h1>BRIX — The Home Depot of Ahmedabad, built for Construction + Quick Commerce</h1>
+        <p>One physical destination for every material needed to build a house—from RMC to a 5mm screw—plus a construction-first quick-commerce model that makes supply reliable, fast, and trackable.</p>
+        <div class="pill-row">
+          <span class="pill">Dealership only when margin &gt; 10%</span>
+          <span class="pill">Otherwise concession rent with dealer-held stock</span>
+          <span class="pill">Moat: depth + availability + SLA + contractor workflows</span>
+        </div>
+        <div class="kpi-row">
+          <div class="kpi-card">
+            <small>Breakeven</small>
+            <div class="kpi-value js-breakeven">2.4 years</div>
+            <p class="muted">Scenario-driven path to profitability</p>
+          </div>
+          <div class="kpi-card">
+            <small>Market opportunity</small>
+            <div class="kpi-value">₹4,700–₹7,800 Cr/year TAM</div>
+            <p class="muted">Ahmedabad residential materials; metro TAM ₹6,000–₹11,000 Cr/year</p>
+          </div>
+          <div class="kpi-card">
+            <small>Year 3 target</small>
+            <div class="kpi-value">₹150–₹300 Cr GMV</div>
+            <p class="muted">SOM anchored in single flagship + quick commerce coverage</p>
+          </div>
+          <div class="kpi-card">
+            <small>Model discipline</small>
+            <div class="kpi-value">Channel logic live</div>
+            <p class="muted">Dealership &gt;10% margin; concession rent &lt;10% margin</p>
+          </div>
+        </div>
+        <div class="chips">
+          <a class="btn btn-primary" href="#financials">View Financials</a>
+          <a class="btn btn-ghost" href="#contact">Download Deck / Contact</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="problem">
+      <h2>Construction procurement is still stuck in the past.</h2>
+      <p>Even a “simple” renovation requires sourcing materials across multiple dealers, chasing quotes, uncertain availability, and unreliable delivery. The process is fragmented, time-consuming, and relationship-driven. The result is avoidable delays, wasted labor hours, and cost overruns.</p>
+      <div class="layout-grid">
+        <div class="card">
+          <h3>What this looks like in real life:</h3>
+          <ul>
+            <li>Contractors spend time sourcing instead of building</li>
+            <li>Homeowners get trapped between confusing choices and inconsistent pricing</li>
+            <li>One missing item can stall a site for hours—or days</li>
+            <li>Delivery and returns are messy; damage/shrink happens silently</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Problem statement</h3>
+      <p><strong>Procurement friction—not construction skill—is what slows projects down.</strong></p>
+      <p class="muted">BRIX unlocks speed, reliability, and clarity so projects move on schedule.</p>
+    </div>
+  </div>
+  <div class="card" style="margin-top:14px;">
+    <h3>Before vs After BRIX</h3>
+    <div class="before-after">
+      <div class="card">
+        <h3><span class="circle-icon">−</span> Before BRIX</h3>
+        <ul>
+          <li>Fragmented dealer chase, uncertain availability</li>
+          <li>Slow delivery for heavy SKUs, no SLA discipline</li>
+          <li>Confusing brand choices; hidden price variance</li>
+          <li>Working capital locked in wrong inventory</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3><span class="circle-icon">+</span> After BRIX</h3>
+        <ul>
+          <li>One-stop depth with SLA-backed delivery tiers</li>
+          <li>Clear Luxury/Classy/Budget/Low Budget mapping</li>
+          <li>Dealership where margin &gt;10%, concession rent otherwise</li>
+          <li>Working capital protected; trust built on availability</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+    <section id="market">
+      <h2>A massive market with digitization still near zero.</h2>
+      <p><strong>TAM/SAM/SOM and growth tailwind captured in one view.</strong></p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>Value</th>
+              <th>Scope</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>TAM</strong></td>
+              <td>₹4,700–₹7,800 Cr/year</td>
+              <td>Ahmedabad residential materials</td>
+            </tr>
+            <tr>
+              <td>Broader metro TAM</td>
+              <td>₹6,000–₹11,000 Cr/year</td>
+              <td>Metro-wide residential materials</td>
+            </tr>
+            <tr>
+              <td><strong>SAM</strong></td>
+              <td>₹1,500–₹5,000 Cr/year</td>
+              <td>Single flagship + quick-commerce coverage</td>
+            </tr>
+            <tr>
+              <td><strong>SOM (Year 3 target)</strong></td>
+              <td>₹150–₹300 Cr/year GMV</td>
+              <td>Execution-backed capture from flagship + QC</td>
+            </tr>
+            <tr>
+              <td><strong>Growth tailwind</strong></td>
+              <td>~9.4% for FY 2024–25</td>
+              <td>Construction sector projected growth</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <details>
+        <summary>Expand for why now</summary>
+        <ul>
+          <li>Rising expectations for speed and transparency in residential builds.</li>
+          <li>Contractors increasingly value reliability over “cheapest quote.”</li>
+          <li>Quick commerce is normalized in India—construction is next, but needs category-specific execution.</li>
+        </ul>
+      </details>
+    </section>
+
+    <section id="competition">
+      <h2>Competition exists—but nobody is built for construction depth + speed.</h2>
+      <div class="layout-grid">
+        <div class="card">
+          <h3>Offline incumbents</h3>
+          <p class="muted">Local dealers/stockists and traditional markets.</p>
+        </div>
+        <div class="card">
+          <h3>Organized B2B construction commerce</h3>
+          <p class="muted">Platforms aggregating supply; breadth but limited local SLA.</p>
+        </div>
+        <div class="card">
+          <h3>Quick-commerce generalists</h3>
+          <p class="muted">Fast, but shallow in construction SKU depth.</p>
+        </div>
+      </div>
+      <div class="card" style="margin-top:14px;">
+        <h3>BRIX wins by design</h3>
+        <ul>
+          <li>Construction-specific depth (not grocery-style assortment)</li>
+          <li>Local availability + SLA discipline</li>
+          <li>Contractor workflows (repeat ordering, tracking, site delivery logic)</li>
+          <li>Smart channel strategy to reduce working capital risk</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="solution">
+      <h2>BRIX is a one-stop construction supply engine.</h2>
+      <div class="two-col">
+        <div class="card">
+          <h3>What BRIX is</h3>
+          <p>A flagship physical outlet in Ahmedabad stocking everything needed to build a house—from structural to finishing, tools and consumables, down to a 5mm screw.</p>
+          <p><strong>Quick-commerce layer:</strong> Fast delivery for eligible items (high-frequency, light-to-medium weight), scheduled logistics for bulky/heavy items, contractor-friendly batching and site-based delivery logic.</p>
+        </div>
+        <div class="card">
+          <h3>Assortment advantage</h3>
+          <ul>
+            <li>Minimum 3 top brands of India per category</li>
+            <li>2 international brands (where applicable)</li>
+            <li>5 other strong alternates</li>
+          </ul>
+          <p>Buyer segmentation: <strong>Luxury / Classy / Budget / Low Budget</strong> to reduce confusion and speed decisions.</p>
+          <p><strong>Result:</strong> BRIX becomes the default procurement destination for contractors, the clearest buying experience for homeowners, and the reliable supply partner for active projects.</p>
+        </div>
+      </div>
+      <div class="grid-visual">
+        <div class="card mini-chart">
+          <div class="badge-row">
+            <span class="badge">Availability</span>
+            <span class="badge">Depth</span>
+          </div>
+          <p class="muted">Assortment planned with redundancy by brand.</p>
+          <div class="bar"><span style="width: 88%;"></span></div>
+        </div>
+        <div class="card mini-chart">
+          <div class="badge-row">
+            <span class="badge">Speed</span>
+            <span class="badge">QC Rail</span>
+          </div>
+          <p class="muted">Quick-commerce for light/medium; scheduled heavy.</p>
+          <div class="bar"><span style="width: 76%; background: linear-gradient(90deg, #2dd4bf, #f4a261);"></span></div>
+        </div>
+        <div class="card mini-chart">
+          <div class="badge-row">
+            <span class="badge">Capital</span>
+            <span class="badge">Working Capital</span>
+          </div>
+          <p class="muted">Channel strategy shields inventory and space.</p>
+          <div class="bar"><span style="width: 82%; background: linear-gradient(90deg, #f4a261, #f6d58a);"></span></div>
+        </div>
+        <div class="card mini-chart">
+          <div class="badge-row">
+            <span class="badge">Trust</span>
+            <span class="badge">SLA</span>
+          </div>
+          <p class="muted">Contractor workflows and site logic build habit.</p>
+          <div class="bar"><span style="width: 90%; background: linear-gradient(90deg, #2dd4bf, #8ce0c9);"></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="execution">
+      <h2>This is not a store. It’s a supply chain with a storefront.</h2>
+      <div class="layout-grid">
+        <div class="card">
+          <h3>Physical model</h3>
+          <ul>
+            <li>Flagship retail outlet (showroom + procurement)</li>
+            <li>Warehouse / micro-fulfillment center (fast picking + staging)</li>
+            <li>Yard handling only when needed (minimized through channel strategy)</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Execution pillars</h3>
+          <ul>
+            <li><strong>Procurement engine</strong>: Vendor onboarding, brand redundancy per category, rebates/returns/reliability terms.</li>
+            <li><strong>Operations engine</strong>: WMS + bin discipline, pick accuracy SOPs, shrink/damage controls.</li>
+            <li><strong>Delivery engine (construction-first)</strong>: Tiered delivery (fast vs scheduled heavy), batching and routing logic, minimum order rules.</li>
+            <li><strong>Sales engine</strong>: Contractor acquisition + site visits, account workflows for repeat orders, project bundles (BOM-style kits).</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="channel">
+      <h2>The smart money move: channel strategy that protects working capital.</h2>
+      <p><strong>If retail margin &gt; 10% → BRIX takes dealership.</strong> If &lt; 10% → BRIX rents the space to a dealer (concession), saving warehouse space + working capital, earning stable rent.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Rule</th>
+              <th>Execution</th>
+              <th>Benefit</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Retail margin &gt; 10%</td>
+              <td>BRIX takes dealership, owns inventory, earns contribution</td>
+              <td>Capture contribution; depth + control</td>
+            </tr>
+            <tr>
+              <td>Retail margin &lt; 10%</td>
+              <td>Dealer holds stock; BRIX rents space (optionally revenue-share)</td>
+              <td>Stable rent, saves capacity, protects working capital</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="muted">Low-margin bulk categories can destroy working capital and logistics; concessions create stable rent income so BRIX stays the one-stop destination without owning every low-margin SKU.</p>
+      <div class="layout-grid">
+        <div class="card">
+          <h3>Dealership lane</h3>
+          <div class="badge-row">
+            <span class="badge">Margin &gt;10%</span>
+            <span class="badge">Owned GMV</span>
+          </div>
+          <p class="muted">Inventory owned; contribution captured; depth curated per brand redundancy rules.</p>
+          <div class="bar"><span style="width: 70%;"></span></div>
+        </div>
+        <div class="card">
+          <h3>Concession lane</h3>
+          <div class="badge-row">
+            <span class="badge">Margin &lt;10%</span>
+            <span class="badge">Rent income</span>
+          </div>
+          <p class="muted">Dealer stock on-site; BRIX earns rent (and optional revenue-share) while freeing capacity.</p>
+          <div class="bar"><span style="width: 55%; background: linear-gradient(90deg, #f6d58a, #f4a261);"></span></div>
+        </div>
+        <div class="card">
+          <h3>Outcome visual</h3>
+          <p class="muted">Blend of dealership + concession delivers stability plus upside.</p>
+          <div class="bar" style="height: 12px;"><span style="width: 62%; background: linear-gradient(90deg, #2dd4bf, #f4a261);"></span></div>
+          <p class="muted" style="margin-top:8px;">Stable rent cushions burn; owned GMV drives EBITDA.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="financials">
+      <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;">
+        <div>
+          <h2>Finance model built like a CFO would: scenario-based, measurable, and controllable.</h2>
+          <p class="muted">Revenue = Owned GMV + Delivery Fees + Concession Rent.</p>
+          <p class="tag accent">All figures in ₹ Crore unless stated otherwise.</p>
+        </div>
+        <div class="scenario-toggle">
+          <button class="scenario-btn active" data-scenario="base">Base</button>
+          <button class="scenario-btn" data-scenario="best">Best</button>
+          <button class="scenario-btn" data-scenario="worst">Worst</button>
+        </div>
+      </div>
+      <div class="financial-highlights">
+        <div class="card">
+          <small>Breakeven</small>
+          <div class="kpi-value js-breakeven">2.4 years</div>
+          <p class="muted">Scenario-driven</p>
+        </div>
+        <div class="card">
+          <small>Peak burn (first 24 months)</small>
+          <div class="kpi-value js-peakburn">₹18.0 Cr</div>
+          <p class="muted">Runway-linked capex + opening inventory</p>
+        </div>
+        <div class="card">
+          <small>Year 5 revenue</small>
+          <div class="kpi-value js-year5-revenue">₹520 Cr</div>
+          <p class="muted">Owned GMV + delivery fees + concession rent</p>
+        </div>
+        <div class="card">
+          <small>Year 5 EBITDA</small>
+          <div class="kpi-value js-year5-ebitda">₹82 Cr</div>
+          <p class="muted">Exit valuation driven by EBITDA multiple</p>
+        </div>
+        <div class="card">
+          <small>Implied exit valuation</small>
+          <div class="kpi-value js-exit">₹820 Cr</div>
+          <p class="muted">EBITDA multiple anchored</p>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="card">
+          <h3>Financial logic</h3>
+          <ol class="muted">
+            <li><strong>Owned GMV</strong> (categories where BRIX holds dealership / inventory)</li>
+            <li><strong>Delivery fees</strong> (quick-commerce)</li>
+            <li><strong>Concession rent</strong> (space rented to dealers, especially low-margin categories)</li>
+          </ol>
+          <p class="muted">Core cost blocks: rent (store/warehouse/yard), payroll, utilities/maintenance/security, software stack, marketing, delivery variable costs, shrink/damage, payment fees, working capital, capex.</p>
+          <details>
+            <summary>Outputs investors care about</summary>
+            <ul>
+              <li>Initial capital required (deposits + fitout + racking + IT + vehicles + launch + opening inventory + dealership buy-ins + contingency)</li>
+              <li>Peak burn and runway (first 24 months)</li>
+              <li>Breakeven timing</li>
+              <li>5-year revenue and EBITDA</li>
+              <li>Free cashflow pathway</li>
+              <li>Implied exit valuation using EBITDA multiple</li>
+            </ul>
+          </details>
+        </div>
+        <div class="card">
+          <h3>Operator notes</h3>
+          <ul>
+            <li>Revenue formula is visible; working capital discipline enforced.</li>
+            <li>Scenario selector lets investors stress-test outcomes.</li>
+            <li>Channel logic lowers inventory and logistics drag.</li>
+            <li>Quick-commerce fees and concession rent diversify income.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="chart-grid">
+        <div class="chart-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <h3>Cash burn (first 24 months)</h3>
+            <span class="tag">Monthly net burn</span>
+          </div>
+          <canvas id="burnChart" height="180"></canvas>
+        </div>
+        <div class="chart-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <h3>Revenue vs EBITDA (5-year)</h3>
+            <span class="tag">₹ Cr</span>
+          </div>
+          <canvas id="revChart" height="180"></canvas>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Financial summary (Year 1–5)</h3>
+        <div class="table-wrap">
+          <table id="financial-table">
+            <thead>
+              <tr>
+                <th>Year</th>
+                <th>Revenue (₹ Cr)</th>
+                <th>EBITDA (₹ Cr)</th>
+                <th>EBITDA Margin</th>
+                <th>Cash Burn / (FCF) (₹ Cr)</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="risks">
+      <h2>The risks—said straight.</h2>
+      <ul class="risk-list">
+        <li><strong>This becomes a showroom, not a supply chain.</strong> If contractors don’t switch, demand stays shallow.</li>
+        <li><strong>Growth hides losses.</strong> Discount-led GMV destroys EBITDA.</li>
+        <li><strong>Quick-commerce can quietly go negative.</strong> Heavy items can turn delivery into a loss engine.</li>
+        <li><strong>Inventory becomes a cash prison.</strong> Slow movers lock working capital.</li>
+        <li><strong>Stockouts kill trust.</strong> Construction customers don’t forgive unreliability.</li>
+        <li><strong>Incumbents fight with relationships.</strong> Supplier pressure and temporary price wars are real.</li>
+        <li><strong>Execution is the moat—and the risk.</strong> Many SKUs require perfect ops discipline.</li>
+        <li><strong>Working capital kills more businesses than competition.</strong> Cash cycle management must be non-negotiable.</li>
+      </ul>
+      <p><strong>Key de-risking design principle:</strong> Own only profitable categories; convert low-margin bulk into rent-backed partner inventory.</p>
+    </section>
+
+    <section id="exit">
+      <h2>If things go south: how fast can we liquidate and cap losses?</h2>
+      <p class="muted">Our downside is capped by design: concessions reduce inventory risk, assets are recoverable, and lease terms are structured to allow transfer or break.</p>
+      <div class="timeline">
+        <div class="card">
+          <strong>0–30 days</strong>
+          <ul>
+            <li>Liquidate fast-moving inventory via bulk dealer/distributor sales + clearance</li>
+            <li>Freeze credit; collect receivables fast</li>
+            <li>Concession rent acts as temporary cash buffer</li>
+          </ul>
+        </div>
+        <div class="card">
+          <strong>30–90 days</strong>
+          <ul>
+            <li>Sell racking/MHE and warehouse assets (high recoverability if standard)</li>
+            <li>Sell fleet (liquid secondary market)</li>
+          </ul>
+        </div>
+        <div class="card">
+          <strong>90–180 days</strong>
+          <ul>
+            <li>Transfer/sublease lease using pre-negotiated rights and break clauses</li>
+            <li>Fitout is partially sunk; use modular fitout to reduce downside</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card" style="margin-top:14px;">
+        <h3>Better than liquidation: strategic sale</h3>
+        <p>Sell the package to large dealers/distributors, organized B2B construction commerce players, developer procurement arms, or logistics/fulfillment players.</p>
+        <p>Package = lease + warehouse setup + fleet + trained ops + contractor base + vendor network.</p>
+        <p><strong>Investor takeaway line:</strong> Downside is capped by design; concessions reduce inventory risk, assets are recoverable, and leases are structured for transfer/break.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Why BRIX wins</h2>
+      <div class="layout-grid">
+        <div class="card">
+          <h3>Depth + availability</h3>
+          <p class="muted">Assortment built for construction, not grocery—depth per category and local availability.</p>
+        </div>
+        <div class="card">
+          <h3>Discipline on capital</h3>
+          <p class="muted">Channel strategy turns low-margin categories into rent, not inventory drag.</p>
+        </div>
+        <div class="card">
+          <h3>Contractor workflows</h3>
+          <p class="muted">Repeat ordering, site delivery logic, and SLA obsession build habit and trust.</p>
+        </div>
+        <div class="card">
+          <h3>Quick commerce built for the category</h3>
+          <p class="muted">Tiered delivery rules keep heavy SKUs profitable while keeping speed for light items.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Investor FAQ (fast clarity)</h2>
+      <div class="faq-grid">
+        <details>
+          <summary>How does quick commerce work for heavy materials?</summary>
+          <p class="muted">Heavy/bulky SKUs go to scheduled delivery lanes with minimum order rules. Light/medium SKUs stay in the fast lane for SLA wins.</p>
+        </details>
+        <details>
+          <summary>Why are concessions a feature, not a compromise?</summary>
+          <p class="muted">They convert low-margin bulk into predictable rent, freeing capacity and capital while keeping BRIX the one-stop destination.</p>
+        </details>
+        <details>
+          <summary>What drives breakeven?</summary>
+          <p class="muted">GMV mix, delivery fee coverage, rent from concessions, and inventory turns; scenario selector shows timing.</p>
+        </details>
+        <details>
+          <summary>What’s the inventory discipline policy?</summary>
+          <p class="muted">Brand redundancy by design, strict turns targets, and category-by-category dealership vs concession decisions.</p>
+        </details>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="contact">
+        <h2>Call to action</h2>
+        <p><strong>Talk to the team or grab the deck.</strong> We’re opening the flagship in Ahmedabad and threading quick-commerce rails in parallel.</p>
+        <div class="chips">
+          <a class="btn btn-primary" href="mailto:hello@brix.build">Contact BRIX</a>
+          <a class="btn btn-ghost" href="#financials">Review financials</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>
+    Built for investor clarity. BRIX — construction supply re-engineered.
+  </footer>
+
+  <script>
+    const scenarios = {
+      base: {
+        breakeven: '2.4 years',
+        peakBurn: '₹18.0 Cr',
+        year5Revenue: '₹520 Cr',
+        year5EBITDA: '₹82 Cr',
+        exit: '₹820 Cr (10x EBITDA)',
+        burn: [-2.8, -2.7, -2.5, -2.4, -2.2, -2.1, -2.0, -1.9, -1.8, -1.6, -1.5, -1.3, -1.2, -1.0, -0.8, -0.6, -0.5, -0.3, -0.1, 0.0, 0.1, 0.2, 0.3, 0.4],
+        revenue: [60, 180, 320, 420, 520],
+        ebitda: [-12, -4, 18, 52, 82],
+        cashFlow: [-22, -12, -2, 12, 28]
+      },
+      best: {
+        breakeven: '2.1 years',
+        peakBurn: '₹15.0 Cr',
+        year5Revenue: '₹650 Cr',
+        year5EBITDA: '₹115 Cr',
+        exit: '₹1,265 Cr (11x EBITDA)',
+        burn: [-2.6, -2.5, -2.4, -2.2, -2.0, -1.8, -1.7, -1.6, -1.5, -1.3, -1.1, -0.9, -0.7, -0.5, -0.3, -0.2, 0.0, 0.2, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0],
+        revenue: [75, 230, 360, 500, 650],
+        ebitda: [-10, -2, 28, 82, 115],
+        cashFlow: [-18, -8, 6, 24, 48]
+      },
+      worst: {
+        breakeven: '3.1 years',
+        peakBurn: '₹22.0 Cr',
+        year5Revenue: '₹330 Cr',
+        year5EBITDA: '₹45 Cr',
+        exit: '₹315 Cr (7x EBITDA)',
+        burn: [-3.0, -2.9, -2.8, -2.6, -2.5, -2.4, -2.2, -2.1, -2.0, -1.8, -1.7, -1.6, -1.5, -1.3, -1.2, -1.0, -0.9, -0.7, -0.5, -0.4, -0.2, -0.1, 0.0, 0.1],
+        revenue: [40, 120, 200, 270, 330],
+        ebitda: [-16, -10, 2, 22, 45],
+        cashFlow: [-26, -18, -8, 8, 18]
+      }
+    };
+
+    const burnCtx = document.getElementById('burnChart').getContext('2d');
+    const revCtx = document.getElementById('revChart').getContext('2d');
+    const months = Array.from({ length: 24 }, (_, i) => `M${i + 1}`);
+    const years = ['Y1', 'Y2', 'Y3', 'Y4', 'Y5'];
+
+    const burnChart = new Chart(burnCtx, {
+      type: 'line',
+      data: {
+        labels: months,
+        datasets: [{
+          label: 'Net burn / (cash generation)',
+          data: scenarios.base.burn,
+          borderColor: '#f5c451',
+          backgroundColor: 'rgba(245,196,81,0.2)',
+          tension: 0.35,
+          fill: true,
+          borderWidth: 2,
+          pointRadius: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { labels: { color: '#e8edf5' } } },
+        scales: {
+          x: { ticks: { color: '#97a3c0' }, grid: { color: '#1f2a44' } },
+          y: { ticks: { color: '#97a3c0' }, grid: { color: '#1f2a44' } }
+        }
+      }
+    });
+
+    const revChart = new Chart(revCtx, {
+      type: 'bar',
+      data: {
+        labels: years,
+        datasets: [
+          {
+            type: 'bar',
+            label: 'Revenue',
+            data: scenarios.base.revenue,
+            backgroundColor: 'rgba(245,196,81,0.7)',
+            borderRadius: 6
+          },
+          {
+            type: 'line',
+            label: 'EBITDA',
+            data: scenarios.base.ebitda,
+            borderColor: '#1dd1a1',
+            backgroundColor: 'rgba(29,209,161,0.2)',
+            borderWidth: 2,
+            tension: 0.3,
+            fill: false,
+            pointRadius: 3
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { labels: { color: '#e8edf5' } } },
+        scales: {
+          x: { ticks: { color: '#97a3c0' }, grid: { color: 'rgba(0,0,0,0)' } },
+          y: { ticks: { color: '#97a3c0' }, grid: { color: '#1f2a44' } }
+        }
+      }
+    });
+
+    function updateTable(scenarioKey) {
+      const scenario = scenarios[scenarioKey];
+      const tbody = document.querySelector('#financial-table tbody');
+      tbody.innerHTML = '';
+      scenario.revenue.forEach((rev, idx) => {
+        const ebitda = scenario.ebitda[idx];
+        const cf = scenario.cashFlow[idx];
+        const margin = `${((ebitda / rev) * 100).toFixed(1)}%`;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>Year ${idx + 1}</td>
+          <td>${rev.toFixed(0)}</td>
+          <td>${ebitda.toFixed(0)}</td>
+          <td>${margin}</td>
+          <td>${cf.toFixed(0)}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function updateHighlights(scenarioKey) {
+      const s = scenarios[scenarioKey];
+      document.querySelectorAll('.js-breakeven').forEach(el => el.textContent = s.breakeven);
+      document.querySelector('.js-peakburn').textContent = s.peakBurn;
+      document.querySelector('.js-year5-revenue').textContent = s.year5Revenue;
+      document.querySelector('.js-year5-ebitda').textContent = s.year5EBITDA;
+      document.querySelector('.js-exit').textContent = s.exit;
+    }
+
+    function updateCharts(scenarioKey) {
+      const s = scenarios[scenarioKey];
+      burnChart.data.datasets[0].data = s.burn;
+      revChart.data.datasets[0].data = s.revenue;
+      revChart.data.datasets[1].data = s.ebitda;
+      burnChart.update();
+      revChart.update();
+    }
+
+    function setScenario(key) {
+      document.querySelectorAll('.scenario-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.scenario === key);
+      });
+      updateHighlights(key);
+      updateCharts(key);
+      updateTable(key);
+    }
+
+    document.querySelectorAll('.scenario-btn').forEach(btn => {
+      btn.addEventListener('click', () => setScenario(btn.dataset.scenario));
+    });
+
+    // initial render
+    updateTable('base');
+
+    // simple nav active state
+    const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+    const sections = Array.from(navLinks).map(link => document.querySelector(link.getAttribute('href')));
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href').replace('#','') === entry.target.id));
+        }
+      });
+    }, { rootMargin: '-50% 0px -40% 0px', threshold: 0 });
+    sections.forEach(sec => observer.observe(sec));
+  </script>
+</body>
+</html>
